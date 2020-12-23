@@ -40,5 +40,6 @@
 		<module>java-oop</module>
 		<module>io</module>
 		<module>network</module>
+		<module>jdbc-practices</module>
 	</modules>
 </project>

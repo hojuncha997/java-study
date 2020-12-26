@@ -106,12 +106,16 @@ public class TCPServer {
 					os.write(data.getBytes("utf-8"));
 					//바이트로 받아서 utf8로 인코딩.getByte()는 string을 받아 바이트 배열을 반환한다.
 					//write는 byte 배열을 받아서 outputStream에 나타낸다. 
-					
-					
-					
 				}
-			} catch(IOException e) { //서버 소켓 익셉션
+				
+				
+			} catch(SocketException e) { //소켓익셉션이 IOException의 자식이라 먼저 써줘야함
+				//클라이언트의 비정상종료
+				System.out.println("[server] sudden closed by client");
+			
+			} catch(IOException e) { 
 				System.out.println("[server] error:" + e);
+			
 			} finally {
 				try {
 					if(socket !=null && socket.isClosed()) {

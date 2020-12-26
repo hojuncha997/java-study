@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class TCPClient {
 	private static final String SERVER_IP ="127.0.0.1";
@@ -51,6 +52,10 @@ public class TCPClient {
 			System.out.println("[client] error" + data);
 			
 			
+		} catch(SocketException e) { //소켓익셉션이 IOException의 자식이라 먼저 써줘야함
+			// 서버의 비정상종료
+			System.out.println("[server] sudden closed by client"); 
+		
 		} catch (IOException e) {
 			System.out.println("[client] error:" + e);
 		} finally {

@@ -32,7 +32,7 @@ public class EchoServerReceiveThread extends Thread {
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
 
 			while(true) {
-				//2. 데이터 읽기
+				//2. 데이터 읽기 
 				String data = br.readLine();
 
 				if(data == null){

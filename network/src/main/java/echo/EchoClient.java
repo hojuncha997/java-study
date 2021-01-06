@@ -15,8 +15,7 @@ public class EchoClient {
 	
 	public static void main(String[] args) {
 		Scanner scanner = null;
-		Socket socket = null;
-		
+		Socket socket = null;		
 		try {
 			//1. Scanner 생성(표준입력, 키보드 연결)
 			scanner = new Scanner(System.in);

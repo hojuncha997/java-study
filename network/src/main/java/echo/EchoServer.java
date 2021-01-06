@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class EchoServer {
-	public static final int PORT = 3000;
+	public static final int PORT = 7000;
 	
 	public static void main(String[] args) {
 		ServerSocket serverSocket = null;
@@ -24,6 +24,7 @@ public class EchoServer {
 			serverSocket.bind(new InetSocketAddress("127.0.0.1", PORT));
 
 			//3. accept
+			
 			Socket socket = serverSocket.accept();
 			
 			InetSocketAddress remoteInetSocketAddress = (InetSocketAddress)socket.getRemoteSocketAddress();
@@ -31,12 +32,17 @@ public class EchoServer {
 			String remoteHostAddress = remoteInetAddress.getHostAddress();
 			int remotePort = remoteInetSocketAddress.getPort();
 			System.out.println("[server] connected by client[" + remoteHostAddress + ":" + remotePort + "]");
-			
-			try {
+			//
+			/*
+			 * while(true) { Socket socket = serverSocket.accept(); new
+			 * EchoServerReceiveThread().start(); }
+			 */
+			/* 쓰레드에 붙여 넣을 것임
+			 * try {
 				//4. IOStream 생성(받아오기)
 				BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 				PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
-				
+				//true는 자동으로 flush 하라는 뜻임. printwrite메소드는 상당히 편리함. 알아둘 것.
 				while(true) {
 					//5. 데이터 읽기
 					String data = br.readLine();
@@ -50,7 +56,46 @@ public class EchoServer {
 					System.out.println("[server] received:" + data);
 					
 					//6. 데이터쓰기
-					pw.println(data);
+					pw.println(data); //개행을 붙인 것임
+				}
+			} catch(SocketException e) {
+				// client가 비정상 종료
+				System.out.println("[server] suddenly closed by client");
+			} catch(IOException e) {
+				System.out.println("[server] error:" + e);
+			} finally {
+				try {
+					if(socket != null && !socket.isClosed()) {
+						socket.close();
+					}
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+			}*/
+			
+			
+			
+			
+			
+			try {
+				//4. IOStream 생성(받아오기)
+				BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+				PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
+				//true는 자동으로 flush 하라는 뜻임. printwrite메소드는 상당히 편리함. 알아둘 것.
+				while(true) {
+					//5. 데이터 읽기
+					String data = br.readLine();
+					
+					if(data == null){
+						// client가 소켓을 정상 종료
+						System.out.println("[server] closed by client");
+						break;
+					}
+					
+					System.out.println("[server] received:" + data);
+					
+					//6. 데이터쓰기
+					pw.println(data); //개행을 붙인 것임
 				}
 			} catch(SocketException e) {
 				// client가 비정상 종료

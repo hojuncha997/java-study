@@ -1,3 +1,4 @@
+package powerJava;
 import java.util.Scanner;
 
 class DiceGame {

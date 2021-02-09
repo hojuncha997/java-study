@@ -1,3 +1,4 @@
+package powerJava;
 //원의 속성을 정의하는 Circle클래스에 대한 실습이다.
 // 필드들은 원래 모두 private이었지만 visible하게 하기 위해 public으로 접근제한자를 바꿨다.
 

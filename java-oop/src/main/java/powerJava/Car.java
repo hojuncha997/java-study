@@ -20,7 +20,7 @@ JVM이 클래스의 인스턴스를 생성할 필요 없이 main()메소드를 �
 */
 package powerJava;
 
-class Car2 {
+class Car {
 	private String color;
 	private int speed;
 	private int gear;
@@ -29,7 +29,7 @@ class Car2 {
 	private static int numberOfCars = 0;
 	
 //생성자
-	public Car2(String c, int s, int g) {
+	public Car(String c, int s, int g) {
 		color = c;
 		speed = s;
 		gear = g;
@@ -38,15 +38,5 @@ class Car2 {
 	
 	public static int getNumberOfCars() {
 		return numberOfCars;
-	}
-}
-
-public class CarTest3{
-	public static void main(String[] args) {
-		Car2 c1 = new Car2("blue", 100, 1);
-		Car2 c2 = new Car2("White", 0, 1);
-		
-		int n = Car2.getNumberOfCars(); //정적 메소드 호출. 인스턴스 안 만들었음.
-		System.out.println("지금까지 생성된 자동차 수 = " + n);
 	}
 }

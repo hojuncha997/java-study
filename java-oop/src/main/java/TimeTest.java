@@ -4,13 +4,20 @@ class Time{
 	private int second;
 	
 	public Time() {
-		this(0, 0, 0);
+		this(0, 0, 0); // (정수, 정수, 정수)의 시그니처를 갖는 생성자를 호출함
 	}
 	
 	public Time(int h, int m, int s) {
 		setTime(h, m, s);
 	}
-	
+
+	/*
+	 * public Time(int a, int b, int c) { setTime(a, b, c); }
+	 * 
+	 * 이렇게 시그니처가 같은 메소드를 하나 더 생성하면 오류발생.
+		시그니처를 수정해 주거나 메소드 이름을 바꿔줘야 오류가 사라짐.
+	 * 
+	 */
 	public void setTime(int h, int m, int s) {
 		this.hour = ((h >= 0 && h < 24) ? h : 0);
 		this.minute = ((m >= 0 && m < 60) ? m : 0);

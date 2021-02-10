@@ -39,4 +39,5 @@ class Car {
 	public static int getNumberOfCars() {
 		return numberOfCars;
 	}
+
 }

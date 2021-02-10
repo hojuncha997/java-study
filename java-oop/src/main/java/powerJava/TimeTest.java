@@ -12,8 +12,7 @@ class Time{
 		setTime(h, m, s);
 	}
 
-	/*
-	 * public Time(int a, int b, int c) { setTime(a, b, c); }
+	/*ㅇ	 * public Time(int a, int b, int c) { setTime(a, b, c); }
 	 * 
 	 * 이렇게 시그니처가 같은 메소드를 하나 더 생성하면 오류발생.
 		시그니처를 수정해 주거나 메소드 이름을 바꿔줘야 오류가 사라짐.

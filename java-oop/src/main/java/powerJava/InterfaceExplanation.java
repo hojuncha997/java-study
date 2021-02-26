@@ -481,7 +481,48 @@ public class InterfaceExplanation {
  * 
  * 무명 클래스는 수퍼 클래스에서 상속을 받아 작성하거나 인터페이스를 구현하여 작성할 수 있다.
  * new 키워드 다음에 수퍼 클래스 이름이나 인터페이스 이름을 적어주면 된다. 수퍼클래스 이름을 적으면
- * 그 수퍼 클래스에서 상속을
+ * 그 수퍼 클래스에서 상속을 받는다는 의미이고, 인터페이스  이름인  경우에는 그 인터페이스를 구현한다는 의미이다.
+ * 
+ * 이름이 있는 클래스의 경우
+ * 
+ * class TV implements RemoteControl {
+ * 	...TV라는 이름을 지어준다
+ * }
+ * RemoteControl obj = new TV();
+ * 
+ * 무명 클래스의 경우
+ * 
+ * RemoteControl obj = RemoteControl(){...이름을 지어준다...}
+ * 
+ * 
+ * AnonymousClassTest.java
+ * 
+ * interface RemoteControl{
+ * 	void turnOn();
+ * 	void turnOff();
+ * }
+ * 
+ * public class AnonymousClassTest{
+ * 	public static void main(String[] args){
+ * 		remoteControl ac = new RemoteControl(){ //무명클래스가 정의되면서 동시에 객체도 생성
+ * 			public void turnOn(){
+ * 				System.out.println("TV turnOn()");
+ * 			}
+ * 			public void turnOff(){
+ * 				System.out.println("TV turnOff()");
+ * 			}
+ * 		};
+ * 		ac.turnOn();
+ * 		ac.turnOff();
+ * 	}
+ * }
+ * 
+ * 무명 클래스도 내부 클래스와 같이 필드와 다른 메소드들을 정의할 수 있다. 다만 메소드 안에 정의되는
+ * 지역 변수 중에서는 final로 선언된 변수만 사용 가능하다. 무명 클래스는 주로 그래픽 사용자
+ * 인터페이스의 이벤트 처리기를 구현하는 경우에 많이 사용된다. 이벤트 처리기를 구현하는 경우에 많이 사용된다.
+ * 이벤트 처리 객체는 하나만 생성되면 되기 때문이다. 구태여 클래스에 이름을 붙일 필요가 없는 것이다.
+ * 
+ * 
  * 
  * 
  * 

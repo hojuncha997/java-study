@@ -264,6 +264,21 @@ public class GenericAndCollection {
  * 여기서 T extends Comparable은 타입 T가 Comparable 인터페이스를 구현한 클래스들
  * (String 클래스 등)에 대해서만 호출될 수 있음을 의미한다. 여기서 주의할 점은 implements라는
  * 키워드를 사용하지 않고 extends라는 키워드를 사용하였다는 점이다.
- * ㅇ
+ * 
+ * 
+ * 
+ * 3. 제네릭과 상속
+ * :
+ * 우리는 다형성에 의하여 Integer 객체를 Object 객체 변수로 가리키게 할 수 있음을 알 고 있다. 
+ * Integer가 Object로부터 상속받았기 때문이다.
+ * 
+ * Object obj = new Object();
+ * Integer i = new Integer(10);
+ * obj = i //Ok
+ * 
+ * 제네릭도 마찬가지이다. 만약 Number를 타입 매개변수로 주어서 객체를 생성하였으면 Number의
+ * 자식 클래스인Integer, Double의 객체도 처리할 수 있다.
+ * 
+ * 
  *
  */

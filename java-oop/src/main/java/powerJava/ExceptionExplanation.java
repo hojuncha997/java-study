@@ -238,8 +238,7 @@ public class ExceptionExplanation {
  * 오류코드를 정상적인 코드와 분리할 수 없다.
  * 
  * 
- * 
- * 
+ *  
  * 
  * 
  * 

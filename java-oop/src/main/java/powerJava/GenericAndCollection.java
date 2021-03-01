@@ -277,8 +277,31 @@ public class GenericAndCollection {
  * obj = i //Ok
  * 
  * 제네릭도 마찬가지이다. 만약 Number를 타입 매개변수로 주어서 객체를 생성하였으면 Number의
- * 자식 클래스인Integer, Double의 객체도 처리할 수 있다.
+ * 자식 클래스인 Integer, Double의 객체도 처리할 수 있다.
+ * 
+ * Box<Number> box = new Box<number>();
+ * box.add(new Integer(10)); //ok
+ * box.add(new Double(10.1);) //ok
+ * 
+ * 하지만 다음과 같은 제네릭 메소드를 고려해보자. 어떤 타입의 인수를 받을 수 있을까?
+ * 
+ * public void sub(Box<Number> n) { ... }
+ *  
+ * 물론 Box<Number> 타입은 받을 수 있을 것이다. Box<Integer>와 Box<Double>은 받을 수 있을까? 
+ * 정답은 "no"이다. 왜냐하면 Box<Integer>와 Box<Double>은 Box<Number>의 자식 클래스가 아니기
+ * 때문이다. Interger가 Number의 자식이기는 하지만, Box<Integer>는 Box<Number>의 자식은 아니다.
  * 
  * 
+ * 제네릭 클래스의 상속
+ * :
+ * 그렇다면 제네릭 클래스들 간의 상속은 어떻게 표시하는가? extends나 implements를 사용하면 제네릭 클래스나
+ * 제네릭 인터페이스 간의 상속을 표시할 수 있다. 우리가 잠시 후에 학습하게 되는 컬렉션 클래스들을 예로 들어서
+ * 설명하여 보자.
+ * 
+ * Array<E>List implements List<E> { ... }
+ * List<E> extends Collection<E> { ... }
+ * 
+ * 위의 문장에서 유추해 보면 ArrayList<String>는 List<String>의 자식 클래스가 된다.
+ * 또, List<String>은 Collection<String>의 자식클래스가 된다.
  *
  */

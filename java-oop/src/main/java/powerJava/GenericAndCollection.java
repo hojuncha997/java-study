@@ -298,10 +298,107 @@ public class GenericAndCollection {
  * 제네릭 인터페이스 간의 상속을 표시할 수 있다. 우리가 잠시 후에 학습하게 되는 컬렉션 클래스들을 예로 들어서
  * 설명하여 보자.
  * 
- * Array<E>List implements List<E> { ... }
+ * ArrayList<E> implements List<E> { ... }
  * List<E> extends Collection<E> { ... }
  * 
  * 위의 문장에서 유추해 보면 ArrayList<String>는 List<String>의 자식 클래스가 된다.
  * 또, List<String>은 Collection<String>의 자식클래스가 된다.
+ * 
+ * Collection <== List<String> <== ArrayList<String>
+ * 
+ * 
+ * 4. 와일드 카드
+ * : 
+ * 제네릭을 사용하는 코드에서 물음표(?)는 와일드 카드(wild card)라고 불린다. 와일드 카드는 카드 게임에서
+ * 조커나 마찬가지의 역할을 한다. 즉 어떤 타입이든지 나타낼 수 있다. 와일드 카드는 다양하게 사용되는데,
+ * 매개변수, 필드, 지역변수의 타입을 나타내는 데 사용된다.
+ * 
+ * 상한이 있는 와일드 카드
+ * :
+ * 상한이 있는 와일드 카드는 전체 타입을 나타내는 것이 아니고 일정한 상한이 있는 타입을 표시하는 데 사용된다.
+ * 상한이 있는 와일드 카드는, ? 다음에 extends를 붙여서 나타낸다. extends 다음에는 상한이 온다.
+ * 예를 들어서 List<Integer>, List<Double>, List<Number>에만 작동되는 메소드를 작성한다고 가정하자.
+ * Integer나 Double은 모두 Number 클래스를 상속받기 때문에 다음과 같이 매개변수를 지정하면 된다.
+ * 
+ * public static void process(List<? extends Number> list) { ... }
+ * 
+ * List<? extends Number>의 의미는 Number를 상속받은 어떤 클래스도 ? 자리에 올 수 있다는 것이다.
+ * 이렇게 표시하면 List<Number>보다는 더 적용 대상을 넓힌 것이다. 왜냐하면 List<Number>는
+ * Number에 대해서만 매치되지만 List<? extends Number>은 Number 뿐만 아니라 Number의 자식클래스에 
+ * 대해서도 매치된다.
+ * 
+ * 예를 들어서 리스트의 요소들에 대하여 합계를 구하는 정적 메소드를 작성하여 보면 다음과 같다.
+ * 
+ * public static double sumOfList(List<? extends Number> list) {
+ * 		//Number 클래스의 모든 자식 클래스에 대하여 매치되는 와일드 카드이다.
+ * 	double s = 0.0;
+ * 
+ * 	for (Number n : list)
+ * 	s += n.doubleValue();
+ * 
+ * return s;
+ * }
+ * 
+ * 
+ * 위의 메소드는 다음과 같이 호출이 가능하다.
+ * 
+ * List<Integer> li = Arrays.asList(1, 2, 3)
+ * System.out.println("sum = " + sumOfList(li))
+ * 
+ * 한도가 없는 와일드 카드
+ * 
+ * 한도가 없는 와일드 카드는 단순히 ?으로만 이루어진다. 예를 들면 List<?>와 같다. 이 와일드 카드는
+ * 모든 타입에 매치된다. 얼핏 보면 List<?>와 List<Object>는 동일한 효과를 낼 것으로 보인다.
+ * 하지만 약간 다르다. 예를 들어서 리스트 안의 모든 요소들을 출력하는 printList() 메소드를 
+ * 다음과 같이 작성하여 보자.
+ * 
+ * public static void printList(List<Object> list) {
+ * 	for(Object elem : list)
+ * 		System.out.println(elem + " ")
+ * 	System.out.println();
+ * }
+ * 
+ * printList()의 목적은 모든 타입의 리스트를 출력하는 것이다. 그러나 printList()는 Object 객체의
+ * 리스트만을 출력할 수 있다. 왜냐하면 List<Integer>, List<String>, List<Double>와 같은
+ * 클래스들은 List<Object>의 자식이 아니기 때문이다.
+ * 
+ * 따라서 올바르게 작성된 printList()는 다음과 같다.
+ * 
+ * public static void printList(List<?> list) {
+ * 	for(Object elem : list)
+ * 		System.out.print(elem + " ")
+ * 	System.out.println();
+ * }
+ * 
+ * 어떤 타입 A에 대하여 List<A>의 자손 클래스가 되므로 다음과 같이 printList()를 이용하여서 다양한
+ * 타입의 리스트들을 출력할 수 있다.
+ * 
+ * List<Integer> li = Arrays.asList(1,2,3)
+ * List<String> ls = Arrays.asList("one", "two", "three")
+ * printList(li);
+ * printList(ls);
+ * 
+ * 여기서 Arrays.asList()는 정적 메소드로서 지정된 배열을 리스트로 변환하여서 반환한다.
+ * 
+ * 
+ * 하한이 있는 와일드 카드
+ * :
+ * 이번에는 하한이 있는 와일드 카드를 살펴보자. 이것은 <? super A>와 같은 문법을 사용한다. 예를 들어서
+ * Integer 객체를 리스트에 추가하는 메소드를 작성한다고 가정하자. List<Integer>, List<Number>,
+ * List<Object>와 같은 Integer와 같은 Integer 값을 가지고 있는 모든 객체에 대하여 작동 하도록 한다.
+ * 따라서 Integer 클래스의 조상 클래스들에 대하여 작동되어야 하므로 List<? super Integer>와 같이
+ * 표기하면 된다.
+ * 
+ * public static void addNumbers(List<? super Integer> list) {
+ * 	for(int i = 1; i<=10; i++) {
+ * 		list.add(i);
+ * 	}
+ * }
+ * 
+ *	
+ * 
+ * 
+ * 
+ * 
  *
  */

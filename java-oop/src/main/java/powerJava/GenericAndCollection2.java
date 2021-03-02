@@ -22,7 +22,7 @@ public class GenericAndCollection2 {
  * :
  * 컬렉션에 대하여 본격적으로 하
  * 
- * 
+ * ㅇ
  * 
  * 
  * 

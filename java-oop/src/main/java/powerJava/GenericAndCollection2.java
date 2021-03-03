@@ -402,6 +402,111 @@ public class GenericAndCollection2 {
  * 
  * 			9. Set 
  * 
+ * 앞에서 학습한 리스트는 원소 간의 순서가 존재한다. 하지만 만약 순서에는 상관 없이 원소만 저장하고 싶은 경우도 존재한다.
+ * 이 때 사용할 수 있는 자료 구조가 집합(set)이다. 수학적으로 집합(set)은 동일한 원소를 중복해서 가질 수 없다.
+ * A = {1, 2, 3, 4, 5}는 집합이지만 B = {1, 2, 2, 3}은 집합이 아니다. Set 인터페이스는 Collection
+ * 인터페이스를 제공하는 메소드만을 포함하며 다만 원소의 중복만을 막도록 설계되어 있다.
+ * 
+ * Set을 구현하는 가장 잘 알려진 방법이 해쉬테이블(hash table)이다.
+ * 해쉬 테이블은 각각의 원소에 대하여 해쉬 코드라는 정수를 계산한다. 해쉬코드는 대개 객체의 인스턴스 필드로부터 계산된다.
+ * 각 클래스마다 해쉬코드를 계산하는 메소드인 hashCode()를 가지고 있다. 예를 들어서 "Park" 문자열 객체에 대한
+ * 해쉬코드는 2480138이다. 만약 클래스 작성자라면 반드시 hashCode()도 구현할 책임이 있다. 중요한 것은
+ * 해쉬 코드 계산은 반드시 효율적이어야 한다.
+ * 
+ * 자바에서 해쉬 테이블은 LinkedList의 배열로 구현된다. 각 리스트는 버킷(bucket)이라고 불리운다. 테이블에서
+ * 원하는 객체를 찾기 위해서는 먼저 객체의 해쉬 코드를 계산하고 테이블의 크기에 맞추어 나머지 연산을 수행한 후에
+ * 결과로 나오는 숫자를 테이블의 인덱스로 사용하면 된다. 예를 들어서 테이블의 크기가 128이고 "Park" 문자열이
+ * 원하는 객체라면 "Park" 의 해쉬코드인 2480138을 128로 나눈 나머지인 (2480138 % 128) = 10이 버킷의 번호가 된다.
+ * 
+ * p557 참고
+ * 
+ * 
+ * 자바에서는 Set 인터페이스에 대하여 HashSet, TreeSet, LinkedHashSet의 3가지의 구현이 제공된다.
+ * 
+ * - HashSet:
+ *  HashSet은 해쉬 테이블에 원소를 저장하기 때문에 성능면에서 가장 우수하다. 하지만 원소들의 순서가
+ * 일정하지 않은 단점이 있다. 
+ * 
+ * - TreeSet:
+ *  TreeSet은 레드-블랙 트리(red-black tree)에 원소를 저장한다. 따라서 값에 따라서 순서가 결정된다.
+ * 하지만 HashSet보다는 느리다.
+ * 
+ * - LinkedHashSet:
+ *  LinkedHashSet은 해쉬 테이블과 연결 리스트를 결합한 것으로 원소들의 순서는 삽입되었던 순서와 같다.
+ * LinkedHashSet은 약간의 비용을 들여서 HashSet의 문제점인 순서의 불명확성을 제거한 방법이다.
+ * 
+ * 아래는 HashSet을 사용하는 간단한 예이다.
+ * 
+ * SetTest.java
+ * 
+ * import java.util.*;
+ * 
+ * public class SetTest{
+ * 	public static void main(String[] args){
+ * 		HashSet<String> set = new HashSet<String>();
+ * 
+ * 		set.add("Milk");
+ * 		set.add("Bread");
+ * 		set.add("Butter");
+ * 		set.add("Cheese");
+ * 		set.add("Ham");
+ * 		set.add("Ham"); //중복
+ * 
+ * 		System.out.println(set);
+ * 	}
+ * }
+ * 
+ * ============
+ * [Bread, Milk, Butter, Ham, Cheese] // 순서가 없으며, 햄은 한 번만 저장되었다.
+ * 
+ * 만약 LinkedHashSet을 사용한다면 다음과 같은 결과가 얻어진다. 입력된 순서대로 출력됨에 주의하라.
+ * 
+ * [Milk, Bread, Butter, Cheese, Ham]
+ * 
+ * 만약 TreeSet을 사용한다면 다음과 같은 결과가 얻어진다. 알파벳 순으로 정렬된느 것에 주의하자.
+ * 
+ * [Bread, Butter, Cheese, Ham, Milk]
+ * 
+ * 
+ * 예제
+ * 
+ * Set은 우리가 잘 알다시피 중복을 허용하지 않는다. 이것을 이요하여서 전체 문장에서 중복된 단어를
+ * 검출하는 프로그램을 작성할 수 있다.
+ * 
+ * FindDupplication.java
+ * 
+ * import java.util.*;
+ * 
+ * public class FindDupplication {
+ * 	public static void main(String[] args) {
+ * 		Set<String> s = new HashSet<String>();
+ * 
+ * 		String[] sample = {"단어", "중복", "구절", "중복"};
+ *
+ * 		for(String a :sample)
+ * 			if(!s.add(a))
+ * 				System.out.println("중복된 단어: " + a);
+ * 			//만약 Set 안에 이미 이 원소가 있으면 Set을 변경하지 않고 false를 리턴한다.
+ * 			//If this set already contains the element, the call leaves the setunchanged and returns false
+ * 			System.out.println(s.size() + "중복되지 않은 단어: " + s);
+ * 	}
+ * }
+ * ========
+ * 중복된 단어: 중복
+ * 중복되지 않은 단어: [구절, 단어, 중복]
+ *  
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * 
  * 
  */

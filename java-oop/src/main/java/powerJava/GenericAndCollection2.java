@@ -484,7 +484,7 @@ public class GenericAndCollection2 {
  * 		String[] sample = {"단어", "중복", "구절", "중복"};
  *
  * 		for(String a :sample)
- * 			if(!s.add(a))
+ * 			if(!s.add(a)) //Set에 들어가지 않는다면
  * 				System.out.println("중복된 단어: " + a);
  * 			//만약 Set 안에 이미 이 원소가 있으면 Set을 변경하지 않고 false를 리턴한다.
  * 			//If this set already contains the element, the call leaves the setunchanged and returns false
@@ -497,6 +497,294 @@ public class GenericAndCollection2 {
  *  
  * 
  * 
+ * 대량 연산 메소드
+ * :
+ * 대량 연산 메소드는 집합에는 유용하다. 이것들은 표준 집합 연산을 수행한다. s1과 s2가 Set이라고 하자.
+ * 
+ *  - s1.containsAll(s2) :만약 s2가 s1의 부분집합이면 참이다.
+ *  - s2.addAll(s2) : s1을 s1과 s2의 합집합으로 만든다.
+ *  - s1.retainAll(s2) : s1을 s1과 s2과의 교집합으로 만든다
+ *  - s1.removeAll(s2) : s1을 s1과 s2의 차집합으로 만든다.
+ *
+ * 집합 연산을 할 때 중요한 점은 원집합이 파괴되면 안된다는 것이다. 따라서 집합 연산을 수행하기 전에
+ * 복사본을 만들어야 한다. String 타입의 집합 s1과 s2를 합하려고 하면 먼저 s1을 가지고 새로운
+ * 집합 union을 생성하고 여기에 s2를 더해야 한다.
+ * 
+ * Set<String> union = new HashSet<String>(s1);
+ * 
+ * 집합 연산을 이용하여서 간단한 예제를 작성하여 보면 다음과 같다.
+ * 
+ * 
+ * import java.util.*;
+ * 
+ * public class setTest1 {
+ * 	public static void main(String[] args) {
+ * 		Set<String> s1 = new HashSet<String>();
+ * 		Set<String> s2 = new HashSet<String>();
+ * 
+ * 		s1.add("A");
+ * 		s1.add("B"); 
+ * 		s1.add("C"); 
+ *
+ * 		s2.add("A"); 
+ * 		s2.add("D"); 
+ * 
+ * 		Set<String> union = new HashSet<String>(s1);
+ * 		union.addAll(s2); //s2와 합집합을 만든다
+ * 
+ * 		Set<String> intersection = new HashSet<String>(s1);
+ * 		intersection.retainAll(s2);
+ * 
+ * 		System.out.println("합집합" + union);
+ * 		System.out.println("교집합" + A);
+ * 	}
+ * }
+ * 
+ * =========
+ * 합집합[D, A, B, C]
+ * 교집합[A]
+ * 
+ *  
+ *  
+ *  
+ * 			 10. Queue
+ * 
+ * 큐(Queue)는 데이터를 처리하기 전에 잠시 저장하고 있는 자료 구조이다. 큐는 후단(tail)에서 원소를 추가하고
+ * 전단(head)에서 원소를 삭제한다.
+ * 
+ * 
+ * 전단(front)  o <==[oooooooo]<== o  후단(rear)
+ * 
+ * 
+ * 디큐(deque)는 전단과 후단에서 모두 원소를 추가하거나 삭제할 수 있다. 큐에서는 중간에 원소를 추가하는 것은
+ * 허용되지 않는다. 디큐는 버전 1.6부터 Deque 인터페이스로 추가되었다.
+ * Deque 인터페이스는 ArrayDeque와 LinkedList 클래스들로 구성되었다.
+ *  
+ * Queue 인터페이스
+ * :
+ * Queue인터페이스는 기본적인 Collection의 연산 외에 다음과 같은 삽입, 삭제, 검색 연산을 추가로 제공한다.
+ * 
+ * public interface Queue<E> extends Collection<E> {
+ * 	E element(E e);
+ * 	boolean offer(E e);
+ * 	E peek();
+ * 	E poll();
+ * 	E remove();
+ * }
+ * 
+ * 전형적인 큐는 원소들을 FIFO 형식으로 저장한다. FIFO 큐에서는 새로운 원소들이 큐의 끝에 추가된다. 예외적인 큐는
+ * 우선순위 큐(priority queues)이다. 우선 순위 큐는 원소들을 우선순위에 따라서 저장한다. 기본적인 우선순위는
+ * 원소들의 값이다.
+ * 
+ * add() 메소드는 새로운 원소의 추가가 큐의 용량을 넘어서지 않으면 원소를 추가한다. 만약 용량을 넘어가면 
+ * IllegalStateException이 발생한다. offer() 메소드는 원소 추가에 실패하면 false가 반환되는 것만 다르다.
+ * 
+ * remove()와 poll()은 큐의 처음에 있는 원소를 제거하거나 가져온다. 정확히 어떤 원소가 제거되느냐는
+ * 큐의 정렬 정책에 따라 달라진다. 만약 큐에 원소가 없으면 remove()는 NoSuchElementException을 발생하고
+ * poll()는 null을 반환한다.
+ * 
+ * element()와 peek() 메소드는 큐의 처음에 있는 원소를 삭제하지 않고 가져온다. 만약 큐가 비어 있으면
+ * element()는 NoSuchElementException을 발생하고, peek()는 null을 반환한다.
+ * 
+ * 
+ * 예제
+ * : 아래의 예에서 큐가 카운트 다운 타이머를 구현하기 위하여 사용되었따. 미리 큐에 정수들을 넣어 놓고 이들 값들이 차례대로
+ * 큐에서 삭제되면서 1초에 하나씩 화면에 출력된다.
+ * 
+ * 
+ * import java.util.*;
+ * 
+ * public class QueueTest {
+ * 	public static void main(String[] args) throws InterruptedException {
+ * 		int time = 10;
+ * 
+ * 		Queue<Integer> queue = new LinkedList<Integer>();
+ *  	//Integer를 저장하는 큐를 생성한다. 실제로 링크드리스트 안에 뷰 인터페이스가 구현돼 있다.
+ * 
+ * 		for(int i = time; i >= 0; i--)
+ * 			queue.add(i);
+ *
+ * 		while(!queue.isEmpty()) {
+ * 			System.out.print(queue.remove() + " ");
+ * 			Thread.sleep(1000); //현재의 스레드를 1초간 재운다.
+ * 		}
+ * 	}
+ * }
+ * ========
+ * 10 9 8 7 6 5 4 3 2 1 0
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 우선순위 큐
+ * :
+ * 우선순위 큐는 원소들이 무작위로 삽입되었더라도 정렬된 상태로 원소들을 추출한다. 즉, remove()를
+ * 호출할 때마다 가장 작은 원소가 추출된다. 그러나 우선순위 큐가 항상 정렬될 상태로 원소들을 저장하고
+ * 있는 것은 아니다. 우선순위 큐는 힙(heap)이라고 하는 자료 구조를 내부적으로 사용한다.
+ * 힙은 이진트리의 일종으로서 add()와 remove()를 호출하면 가장 작은 원소가 효율적으로 트리의 루트로
+ * 이동하게 된다.
+ * 
+ * 우선순위 큐의 가장 대표적인 예는 작업스케쥴링(job scheduling)이다. 각 작업은 우선순위를 가지고 있고
+ * 가장 높은 우선순위의 작업이 큐에서 가장 먼저 추출되어서 시작된다.
+ * 
+ * PriorityQueueTest.java
+ * 
+ * import java.util.*;
+ * 
+ * public class PriorityQueueTest {
+ * 	public static void main(String[] args) {
+ * 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(); //우선순위 큐 생성
+ *
+ * 		pq.add(30);
+ * 		pq.add(80);
+ * 		pq.add(20);
+ * 
+ *	 	for(Integer o: pq)
+ * 			System.out.println(o);
+ * 		System.out.println("원소 삭제");
+ * 		while(!pq.isEmpty())
+ * 			System.out.println(pq.remove());
+ * 	}
+ * }
+ * ========
+ * 20 //가장 작은 원소?
+ * 80
+ * 30
+ * 원소 삭제
+ * 20
+ * 30
+ * 80
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 			11. Map
+ * 
+ * Map은 많은 데이터 중에서 원하는 데이터를 빠르게 찾을 수 있는 자료구조이다. 맵은 사전과 같은
+ * 자료 구조이다. 즉 사전처럼 단어가 있고(이것을 key라고 부른다) 단어에 대한 설명 이것을 (value라고 부른다)이 있다.
+ * Map은 중복된 키를 가질 수 없다. 각 키는 오직 하나의 값에만 매핑할 수 있다. 키가 제시되면 Map은 값을 반환한다.
+ * 예를 들어서 학생에 대한 정보를 Map에 저장할 수 있다. 여기서 키는 학번이 될 것이고 값은 학생이 될 것이다.
+ * 
+ * 자바에서는 Map이라는 이름의 인터페이스가 제공되고 이 인터페이스를 구현한 클래스로
+ * HashMap, TreeMap, LinkedHashMap 등의 3가지 클래스가 제공된다. HashMap은 해싱 테이블에 데이터를 저장하고
+ * TreeMap은 탐색 트리에 데이터를 저장한다.
+ *  
+ * HashMap과 TreeMap 중에서 어떤 것을 사용하여야 하는가? 만약 키들을 정렬된 순서로 방문할 필요가 있다면
+ * HashMap이 약간 빠르다. 학생 정보를 저장하는 HashMap을 작성하여 보자. Student 클래스는 미리 정의되어 있다고 
+ * 가정하자. 데이터를 저장하려면 put() 메소드를 사용한다.
+ * 
+ * Map<String, Student> freshman = new HashMap<String, Student>(); //생성
+ * Student kim = new Student("김철수");
+ * freshman.put("20090001", kim); //저장
+ * 
+ * 객체를 다시 추출하려면 get() 메소드를 사용하면 된다.
+ * 
+ * String s = "20090001";
+ * st = freshman.get(s); // 키값을 넣어줌. 김철수를 반환
+ * 
+ * 
+ * 예제
+ * :
+ * 학생들과 관련된 자료들을 맵에 저장하여 처리하는 코드
+ * 
+ * MapTest.java
+ * 
+ * import java.util.*;
+ * 
+ * class Student {
+ * 
+ * 	int number;
+ * 	String name;
+ * 
+ * 	public Student(int number, String name) {
+ * 		this.number = number;
+ * 		this.name = name;
+ * 	}
+ * 
+ * 	public String toString(){
+ * 		return name;
+ * 	}
+ * }
+ * 
+ * public class MapTest {
+ * 	public static void main(String[] args){
+ * 		Map<String, String> st = new HashMap<String, Student>(); //맵 객체 생성, 해쉬맵 사용
+ * 		st.put("20090001", new Student(20090001, "구준표"));
+ * 		st.put("20090002", new Student(20090002, "금잔디"));
+ * 		st.put("20090003", new Student(20090003, "윤지후"));
+ * 
+ *   	//모든 항목을 출력한다
+ *   	System.out.println(st);
+ *   
+ *   	//하나의 항목을 출력한다.
+ *   	System.out.println("20090002");
+ *   
+ *   	//하나의 항목을 삭제한다. 금잔디 삭제
+ *   	st.remove("20090002");
+ *   
+ *   	//하나의 항목을 대치한다. 윤지후가 소이정으로
+ *   	st.put("20090003", new Student(20090003, "소이정"));
+ *   
+ *   	//값을 참조한다
+ *   	System.out.println(st.get("20090003"));
+ *   
+ *   	//모든 항목을 방문한다.
+ *   	for(Map.Entry<String, Student> s : st.entrySet()) {
+ *   		String Key = s.getKey();
+ *   		Student Value = s.getValue();
+ *   		System.out.println("key=" + key + ", value=" + value);
+ *   	}
+ * 	}
+ * }
+ * =====================
+ * {20090001=구준표, 20090002=금잔디, 20090003=윤지후}
+ * 소이정
+ * key=20090001, value=구준표
+ * key=20090003, vlaue=소이정
+ * 
+ *  프로그램 설명// 맵에 저장된 데이터를 방문할 때에는 Map.Entry라는 인터페이스를 사용한다.
+ *  
+ * 
+ * 
+ * 예제 2
+ * :
+ * 아래의 예제는 Map의 3가지 기본적인 연산인
+ * put(), get(), containsKey(), containsValue(), size(), isEmpty()를 보여준다.
+ * 
+ * wordFreq.java
+ * 
+ * import java.util.*;
+ * 
+ * public class WordFreq {
+ * 	public static void main(String[] args) {
+ *		Map<String, Integer> m = new HashMap<String, Integer>(); //맵 객체 생성 
+ *		
+ *		String[] sample = {"to", "be", "or", "not", "to", "be", "is", "a", "problem"}
+ *		//문자열에 포함된 단어의 빈도를 계산한다.
+ *
+ *		for(String a : sample) {
+ *			Integer freq = m.get(a);
+ *			m.put(a, (freq == null) ? 1 : freq + 1);
+ *		}
+ * 
+ * 		System.out.println(m.size() + "단어가 있습니다.");
+ * 		System.out.println(m.containsKey("to"));
+ * 		System.out.println(m.isEmpty());
+ * 		System.out.println(m);		
+ * 	}
+ * }
+ * ========
+ * 7 단어가 있습니다.
+ * true
+ * false
+ * {not=1, to=2, is=1, or=1, a=1, problem=1, be=2}
+ * 
+ * 
+ * 
+ * //먼저 String 배열에서 조건 연산자를 사용하여 만약 단어가 한 번도 등장한 적 없으면 1로 설정한다.
+ * // 만약 한 번이라도 등장한다면 빈도를 나타내는 값을 하나 증가시킨다.
  * 
  * 
  * 
@@ -504,8 +792,7 @@ public class GenericAndCollection2 {
  * 
  * 
  * 
- * 
- * 
+ *			 12. Collection 클래스
  * 
  * 
  * 
